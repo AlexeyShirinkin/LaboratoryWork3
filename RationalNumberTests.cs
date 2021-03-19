@@ -72,5 +72,35 @@ namespace LaboratoryWork3
             Assert.AreEqual(BigInteger.Parse(expectedNumerator), actualNumber.Numerator);
             Assert.AreEqual(BigInteger.Parse(expectedDenominator), actualNumber.Denominator);
         }
+
+        [TestCase("4", "18", "0.(2)", TestName = "WhenSmallNumbers")]
+        [TestCase("-4444", "984", "-4.5(16260)", TestName = "WhenNegativeNumbers")]
+        [TestCase("9", "4", "2.25", TestName = "WhenNotPeriodicFraction")]
+        [TestCase("225", "565",
+            "0.(3982300884955752212389380530973451327433628318584070796460176991150442477876106194690265486725663716814159292035)",
+            TestName = "WhenBigPeriodicFraction")]
+        public void CorrectPeriodicFraction(string numerator, string denominator, string expectedFraction)
+        {
+            var number = new RationalNumber(BigInteger.Parse(numerator), BigInteger.Parse(denominator));
+
+            var actualNumber = RationalNumber.GetPeriodicFraction(number);
+
+            Assert.AreEqual(expectedFraction, actualNumber);
+        }
+
+        [TestCase("4", "4", "1", TestName = "WhenNoFloatPart")]
+        [TestCase("0.(3)", "1", "3", TestName = "WhenSmallPeriodicPart")]
+        [TestCase("-4.5(16260)", "-1111", "246", TestName = "WhenNegativeNumber")]
+        [TestCase("-4.5", "-9", "2", TestName = "WhenNoPeriodicPart")]
+        [TestCase("0.(3982300884955752212389380530973451327433628318584070796460176991150442477876106194690265486725663716814159292035)",
+            "45", "113",
+            TestName = "WhenBigPeriodicFraction")]
+        public void CorrectOrdinaryFraction(string number, string expectedNumerator, string expectedDenominator)
+        {
+            var actualNumber = RationalNumber.GetOrdinaryFraction(number);
+
+            Assert.AreEqual(BigInteger.Parse(expectedNumerator), actualNumber.Numerator);
+            Assert.AreEqual(BigInteger.Parse(expectedDenominator), actualNumber.Denominator);
+        }
     }
 }
