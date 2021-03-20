@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Numerics;
 using System.Xml;
 
@@ -13,6 +14,7 @@ namespace LaboratoryWork3
             xDoc.Load("Data.xml");
             var xmlRoot = xDoc.DocumentElement;
 
+            var periodicFraction = string.Empty;
             var rationalNumbers = new List<RationalNumber>();
 
             foreach (XmlNode xmlNode in xmlRoot)
@@ -25,11 +27,13 @@ namespace LaboratoryWork3
                         numerator = BigInteger.Parse(childNode.InnerText);
                     if (childNode.Name == "denominator")
                         denominator = BigInteger.Parse(childNode.InnerText);
+                    if (childNode.Name == "periodic")
+                        periodicFraction = childNode.InnerText;
                 }
                 rationalNumbers.Add(new RationalNumber(numerator, denominator));
             }
 
-            foreach (var number in rationalNumbers)
+            foreach (var number in rationalNumbers.Take(2))
             {
                 Console.WriteLine(number.Numerator + "/" + number.Denominator);
                 Console.WriteLine(RationalNumber.GetPeriodicFraction(number));
@@ -51,6 +55,10 @@ namespace LaboratoryWork3
             var division = rationalNumbers[0] / rationalNumbers[1];
             Console.WriteLine("Division: " + division.Numerator + "/" + division.Denominator);
             Console.WriteLine(RationalNumber.GetPeriodicFraction(division) + "\n");
+
+            Console.WriteLine("Periodic Fraction: " + periodicFraction);
+            var ordinaryFraction = RationalNumber.GetOrdinaryFraction(periodicFraction);
+            Console.WriteLine("Ordinary Fraction: " + ordinaryFraction.Numerator + "/" + ordinaryFraction.Denominator);
         }
     }
 }
